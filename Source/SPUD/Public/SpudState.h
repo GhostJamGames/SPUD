@@ -23,19 +23,19 @@ class SPUD_API USpudSaveGameInfo : public UObject
 	GENERATED_BODY()
 	public:
 	/// Top-line title string. Might include the name of the region, current quest etc
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "SPUD")
 	FText Title;
 	/// Timestamp of when this save was created
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "SPUD")
 	FDateTime Timestamp;
 	/// The name of the save game slot this refers to
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "SPUD")
 	FString SlotName;
 	/// Thumbnail screenshot (may be blank if one wasn't included in the save game)
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "SPUD")
 	TObjectPtr<UTexture2D> Thumbnail;
 	/// Custom fields that you chose to store with the save header information specifically for your game
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "SPUD")
 	TObjectPtr<USpudCustomSaveInfo> CustomInfo;
 
 };
@@ -308,65 +308,65 @@ public:
 	bool IsLevelDataLoaded(const FString& LevelName);
 
 	/// Clear the state for a given level (does not reset a loaded level, just deletes saved state)
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	void ClearLevel(const FString& LevelName);
 
 	/// Get the source of this state (e.g. save file), if any;
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	const FString& GetSource() const { return Source; }
 
 	/// Get the title associated with this save state 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	const FText& GetTitle() const { return SaveData.Info.Title; }
 	/// Set the title associated with this save state 
-	UFUNCTION(BlueprintCallable)
-	void SetTitle(const FText& Title) {SaveData.Info.Title = Title; }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void SetTitle(const FText& Title) { SaveData.Info.Title = Title; }
 	/// Extra information to be stored in the save header that can be read when listing saves (before loading)
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	void SetCustomSaveInfo(const USpudCustomSaveInfo* ExtraInfo);
 
 	/// Get the timestamp for when this save state was created
-	UFUNCTION(BlueprintCallable)
-    const FDateTime& GetTimestamp() const { return SaveData.Info.Timestamp; }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	const FDateTime& GetTimestamp() const { return SaveData.Info.Timestamp; }
 	/// Set the timestamp for when this save state was created
-	UFUNCTION(BlueprintCallable)
-    void SetTimestamp(const FDateTime& Timestamp) {SaveData.Info.Timestamp = Timestamp; }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void SetTimestamp(const FDateTime& Timestamp) { SaveData.Info.Timestamp = Timestamp; }
 
 	/// Set the screenshot data for this save		
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	void SetScreenshot(TArray<uint8>& ImgData);
 
 
 	/// Rename a class in this save data
 	/// This is for performing upgrades on save games that would otherwise be broken
 	/// Returns whether any changes were made
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	bool RenameClass(const FString& OldClassName, const FString& NewClassName);
-	
+
 	/// Rename a property on a class in this save data
 	/// This is for performing upgrades on save games that would otherwise be broken
 	/// OldPrefix & NewPrefix are for handling nested structs, format is "StructVarName1/StructVarName2" ofr
 	/// a property which is inside variable named StructVarName1 on the class, and then inside StructVarName2 inside that
 	/// Returns whether any changes were made
-	UFUNCTION(BlueprintCallable)
-    bool RenameProperty(const FString& ClassName, const FString& OldPropertyName, const FString& NewPropertyName, const FString& OldPrefix, const
-                        FString& NewPrefix);
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool RenameProperty(const FString& ClassName, const FString& OldPropertyName, const FString& NewPropertyName, const FString& OldPrefix, const
+		FString& NewPrefix);
 
 	/// Rename a global object so that it can be correctly found on load
 	/// This is for performing upgrades on save games that would otherwise be broken
 	/// Returns whether any changes were made
-	UFUNCTION(BlueprintCallable)
-    bool RenameGlobalObject(const FString& OldName, const FString& NewName);
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool RenameGlobalObject(const FString& OldName, const FString& NewName);
 
 	/// Rename a level object so that it can be correctly found on load
 	/// This is for performing upgrades on save games that would otherwise be broken
 	/// Returns whether any changes were made
-	UFUNCTION(BlueprintCallable)
-    bool RenameLevelObject(const FString& LevelName, const FString& OldName, const FString& NewName);
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool RenameLevelObject(const FString& LevelName, const FString& OldName, const FString& NewName);
 
 	/// Get a list of the levels we have state about
-	UFUNCTION(BlueprintCallable)
-    TArray<FString> GetLevelNames(bool bLoadedOnly);
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	TArray<FString> GetLevelNames(bool bLoadedOnly);
 
 	/// Utility method to read *just* the information part of a save game from the start of an archive
 	/// This only reads the minimum needed to describe the save file and doesn't load any other data.
@@ -374,7 +374,7 @@ public:
 
 	bool bTestRequireSlowPath = false;
 	bool bTestRequireFastPath = false;
-	
+
 };
 
 /// Custom data that can be stored alongside properties for a UObject to handle anything else
@@ -389,7 +389,7 @@ class SPUD_API USpudStateCustomData : public UObject
 {
 	GENERATED_BODY()
 protected:
-	FArchive *SPUDAr;
+	FArchive* SPUDAr;
 
 	TArray<TSharedPtr<FSpudAdhocWrapperChunk>> ChunkStack;
 
@@ -408,20 +408,20 @@ public:
 	/// Write a value to the custom data
 	/// NOTE: May reformat some data types for efficiency, e.g. bool becomes uint8
 	template <typename T>
-    void Write(const T& Value)
+	void Write(const T& Value)
 	{
 		if (!CanWrite())
 		{
 			UE_LOG(LogSpudState, Error, TEXT("CustomData invalid for writing"));
 			return;
 		}
-		
+
 		SpudPropertyUtil::WriteRaw(Value, *SPUDAr);
 	}
 
 	/// Try to read a value from the custom data
 	template <typename T>
-    bool Read(T& OutValue)
+	bool Read(T& OutValue)
 	{
 		if (!CanRead())
 		{
@@ -433,7 +433,7 @@ public:
 			UE_LOG(LogSpudState, Error, TEXT("CustomData has reached the end, cannot read"));
 			return false;
 		}
-		
+
 		SpudPropertyUtil::ReadRaw(OutValue, *SPUDAr);
 		return true;
 	}
@@ -441,127 +441,127 @@ public:
 	// Now a bunch of explicit functions so that Blueprints can do something useful with this
 
 	/// Write a vector
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	void WriteVector(const FVector& V) { Write(V); }
 	/**
 	 * @brief Read a vector
 	 * @param OutVector The vector we read if successful
 	 * @return True if the value was read successfully
 	 */
-	UFUNCTION(BlueprintCallable)
-    bool ReadVector(FVector& OutVector) { return Read(OutVector); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool ReadVector(FVector& OutVector) { return Read(OutVector); }
 
 	/// Write a rotator
-	UFUNCTION(BlueprintCallable)
-    void WriteRotator(const FRotator& Rot) { Write(Rot); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void WriteRotator(const FRotator& Rot) { Write(Rot); }
 	/**
 	* @brief Read a rotator
 	* @param OutRotator The rotator we read if successful
 	* @return True if the value was read successfully
 	*/
-	UFUNCTION(BlueprintCallable)
-    bool ReadRotator(FRotator& OutRotator) { return Read(OutRotator); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool ReadRotator(FRotator& OutRotator) { return Read(OutRotator); }
 
 	/// Write a transform
-	UFUNCTION(BlueprintCallable)
-    void WriteTransform(const FTransform& T) { Write(T); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void WriteTransform(const FTransform& T) { Write(T); }
 	/**
 	* @brief Read a transform
 	* @param OutTransform The transform we read if successful
 	* @return True if the value was read successfully
 	*/
-	UFUNCTION(BlueprintCallable)
-    bool ReadTransform(FTransform& OutTransform) { return Read(OutTransform); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool ReadTransform(FTransform& OutTransform) { return Read(OutTransform); }
 
 	/// Write a quaternion
-	UFUNCTION(BlueprintCallable)
-    void WriteQuaternion(const FQuat& Q) { Write(Q); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void WriteQuaternion(const FQuat& Q) { Write(Q); }
 	/**
 	* @brief Read a quaternion
 	* @param OutQuaternion The quaternion we read if successful
 	* @return True if the value was read successfully
 	*/
-	UFUNCTION(BlueprintCallable)
-    bool ReadQuaternion(FQuat& OutQuaternion) { return Read(OutQuaternion); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool ReadQuaternion(FQuat& OutQuaternion) { return Read(OutQuaternion); }
 
 	/// Write a string
-	UFUNCTION(BlueprintCallable)
-    void WriteString(const FString& S) { Write(S); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void WriteString(const FString& S) { Write(S); }
 
 	/**
 	* @brief Read a string
 	* @param OutString The string we read if successful
 	* @return True if the value was read successfully
 	*/
-	UFUNCTION(BlueprintCallable)
-    bool ReadString(FString& OutString) { return Read(OutString); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool ReadString(FString& OutString) { return Read(OutString); }
 
 	/// Write text
-	UFUNCTION(BlueprintCallable)
-    void WriteText(const FText& S) { Write(S); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void WriteText(const FText& S) { Write(S); }
 	/**
 	* @brief Read text
 	* @param OutText The text we read if successful
 	* @return True if the value was read successfully
 	*/
-	UFUNCTION(BlueprintCallable)
-    bool ReadText(FText& OutText) { return Read(OutText); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool ReadText(FText& OutText) { return Read(OutText); }
 
 	/// Write a GUID
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	void WriteGuid(const FGuid& G) { Write(G); }
-	
+
 	/**
 	* @brief Read a GUID
 	* @param OutGuid The FGuid we read if successful
 	* @return True if the value was read successfully
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	bool ReadGuid(FGuid& OutGuid) { return Read(OutGuid); }
-	
+
 	/// Write an int
-	UFUNCTION(BlueprintCallable)
-    void WriteInt(int V) { Write(V); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void WriteInt(int V) { Write(V); }
 	/**
 	* @brief Read an int
 	* @param OutInt The int we read if successful
 	* @return True if the value was read successfully
 	*/
-	UFUNCTION(BlueprintCallable)
-    bool ReadInt(int& OutInt) { return Read(OutInt); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool ReadInt(int& OutInt) { return Read(OutInt); }
 
 	/// Write an int64
-	UFUNCTION(BlueprintCallable)
-    void WriteInt64(int64 V) { Write(V); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void WriteInt64(int64 V) { Write(V); }
 	/**
 	* @brief Read an int64
 	* @param OutInt64 The int64 we read if successful
 	* @return True if the value was read successfully
 	*/
-	UFUNCTION(BlueprintCallable)
-    bool ReadInt64(int64& OutInt64) { return Read(OutInt64); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool ReadInt64(int64& OutInt64) { return Read(OutInt64); }
 
 	/// Write a float
-	UFUNCTION(BlueprintCallable)
-    void WriteFloat(float V) { Write(V); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void WriteFloat(float V) { Write(V); }
 	/**
 	* @brief Read a float
 	* @param OutFloat The float we read if successful
 	* @return True if the value was read successfully
 	*/
-	UFUNCTION(BlueprintCallable)
-    bool ReadFloat(float& OutFloat) { return Read(OutFloat); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool ReadFloat(float& OutFloat) { return Read(OutFloat); }
 
 	/// Write a byte
-	UFUNCTION(BlueprintCallable)
-    void WriteByte(uint8 V) { Write(V); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	void WriteByte(uint8 V) { Write(V); }
 	/**
 	* @brief Read a byte
 	* @param OutByte The byte we read if successful
 	* @return True if the value was read successfully
 	*/
-	UFUNCTION(BlueprintCallable)
-    bool ReadByte(uint8& OutByte) { return Read(OutByte); }
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool ReadByte(uint8& OutByte) { return Read(OutByte); }
 
 	/// Access the underlying archive in order to write custom data directly.
 	FArchive* GetUnderlyingArchive() const { return SPUDAr; }
@@ -574,18 +574,18 @@ public:
 	 * You MUST balance this call with EndWriteChunk with the same ID. However you can nest chunks
 	 * by calling BeginWriteChunk again (with a different ID), so long as all begin/ends are balanced and
 	 * inner chunks are completed before outer ones.
-	 * 
+	 *
 	 * @param MagicID 4-character string (longer strings will be truncated) identifying this chunk type.
 	 *   You can use the same ID multiple times for sibling chunks if you want, it's a type identifier not an instance
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	void BeginWriteChunk(FString MagicID);
 
 	/**
 	 * Finish writing a chunk. You must call this the same number of times as BeginWriteChunk for a given ID
 	 * @param MagicID 4-character string (longer strings will be truncated) identifying this chunk type
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	void EndWriteChunk(FString MagicID);
 
 	/**
@@ -595,12 +595,12 @@ public:
 	 * This returns whether a chunk of this type was found. If true, you can continue to read the inner data your
 	 * were expecting, and you MUST balance this call with EndReadChunk with the same ID. You can have nested chunks.
 	 * If it returns false, the chunk was not found, and the data pointer will remain unchanged.
-	 * 
+	 *
 	 * @param MagicID 4-character string (longer strings will be truncated) identifying this chunk type.
 	 *   You can use the same ID multiple times for sibling chunks if you want, it's a type identifier not an instance
 	 * @return True if this chunk was found next in the data stream
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	bool BeginReadChunk(FString MagicID);
 
 	/**
@@ -609,9 +609,9 @@ public:
 	 * of the chunk.
 	 * @param MagicID 4-character string (longer strings will be truncated) identifying this chunk type
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	void EndReadChunk(FString MagicID);
-	
+
 	/**
 	 * Peek at the upcoming data in read mode, and return the ID of the next chunk.
 	 * You MUST check the OutMagicID because this function only returns false if there wasn't enough data left to read.
@@ -619,23 +619,23 @@ public:
 	 * @param OutMagicID Reference to a string which will contain the 4-character identifier
 	 * @returns True if we managed to read enough data to read something that might be a chunk
 	 */
-	UFUNCTION(BlueprintCallable)
-	bool PeekChunk(FString &OutMagicID);
-	
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
+	bool PeekChunk(FString& OutMagicID);
+
 	/**
 	 * Skip over the next chunk of data, so long as it has the correct ID. If not, this call is ignored for safety.
 	 * @param MagicID 4-character string (longer strings will be truncated) identifying the chunk type
 	 * @returns True if we did indeed skip a chunk
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	bool SkipChunk(FString MagicID);
-	
+
 	/**
 	 * Return whether we're still reading/writing a given chunk. Useful when reading and detecting the end of
 	 * a block of 1..n data.
 	 * @param MagicID 4-character string (longer strings will be truncated) identifying chunk type
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "SPUD")
 	bool IsStillInChunk(FString MagicID) const;
 
 };

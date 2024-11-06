@@ -5,6 +5,7 @@
 #include "SpudRuntimeStoredActorComponent.generated.h"
 
 
+class UWorldPartitionRuntimeCell;
 /**
  * Tracks runtime-spawned actors across world partition cell loads/unloads. Assumes the owning actor contains the
  * SpudGuid property.
@@ -23,7 +24,7 @@ public:
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
     /// Force updating current cell.
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "SPUD")
     void UpdateCurrentCell();
 
 protected:
@@ -34,7 +35,7 @@ private:
      * Can the owning actor can cross cells? Ticking will be enabled if this flag is true. If the position changes
      * infrequently, it's more efficient to manually call UpdateCurrentCell().
      */
-    UPROPERTY(EditDefaultsOnly)
+    UPROPERTY(EditDefaultsOnly, Category = "SPUD")
     bool bCanCrossCell = false;
 
     FString CurrentCellName;

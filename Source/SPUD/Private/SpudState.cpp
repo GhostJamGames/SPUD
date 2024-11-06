@@ -11,6 +11,10 @@
 #include "ImageUtils.h"
 #include "../Public/SpudMemoryReaderWriter.h"
 #include "GameFramework/PlayerState.h"
+#include "Engine/Level.h"
+#include "Components/PrimitiveComponent.h"
+#include "Misc/Paths.h"
+#include "UnrealClient.h"
 
 DEFINE_LOG_CATEGORY(LogSpudState)
 

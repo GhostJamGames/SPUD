@@ -8,6 +8,9 @@
 #include "TimerManager.h"
 #include "HAL/FileManager.h"
 #include "Async/Async.h"
+#include "Engine/GameViewportClient.h"
+#include "Async/AsyncWork.h"
+#include "Runtime/Launch/Resources/Version.h"
 
 DEFINE_LOG_CATEGORY(LogSpudSubsystem)
 
